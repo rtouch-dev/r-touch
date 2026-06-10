@@ -1,9 +1,12 @@
+use log::logmgr;
 use std::{
     env,
     fs::{self, File},
 };
-mod logger; //the logging logic (logger.rs)
-mod logmgr; //log-manager (logmgr.rs)
+mod log {
+    pub mod logger; //the logging logic (src/log/logger.rs)
+    pub mod logmgr; //log manager, makes logging much easier (src/log/logmgr.rs)
+}
 mod replace_dir; //the file that is taking care on replacing folders with files (take a look)
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -20,15 +23,15 @@ fn main() {
         std::process::exit(1);
     });
     //logging section
-    println!("Success!");
+    // println!("Success!");
     if !create_parents && should_log {
         //if created a file in a regular path (in an existing dir) and didn't run with --no-log
 
-        logmgr::log_manager(&format!("File Created: {path}"));
+        log::logmgr::log_manager(&format!("File Created: {path}"));
     } else {
         //if DID create the folder
         if should_log {
-            logmgr::log_manager(&format!("File & parent folder created: {path}"))
+            log::logmgr::log_manager(&format!("File & parent folder created: {path}"))
         };
     }
 }
