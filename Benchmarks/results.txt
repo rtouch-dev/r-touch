@@ -1,3 +1,4 @@
+user@user-PC:/dev/shm$ #using SHared-Memory to prevent IO bottelnecks
 user@user-PC:/dev/shm$ #round 1 - ASCII-only name
 user@user-PC:/dev/shm$ ls -A
 user@user-PC:/dev/shm$ time optimized-rtouch test
