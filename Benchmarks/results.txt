@@ -24,6 +24,7 @@ user@user-PC:/dev/shm$ time touch 1234567890
 
 real	0m0.002s
 user	0m0.001s
+sys   0m0.002s
 user@user-PC:/dev/shm$ #IDK how 0.002 + 0.001 is 0.002
 user@user-PC:/dev/shm$ #but nevermind - it's a tie (however it's probably because of the in-accuraty of floating numbers)
 user@user-PC:/dev/shm$ #round 3 - combining round 1 and 2
