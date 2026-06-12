@@ -74,7 +74,6 @@ fn create(path: &str, create_parents: bool) -> Result<(), String> {
     if create_parents {
         //if the bool from the function above is true
         if let Some(parent) = path_buf.parent() {
-            //I honestly don't know what that is a friend helped me lol
             if !parent.as_os_str().is_empty() {
                 fs::create_dir_all(parent)
                     .map_err(|e| format!("Failed to create parent directories: {e}"))?;
