@@ -1,6 +1,6 @@
 use super::logmgr;
 use std::fs::{self, File};
-use std::io;
+use std::io::{self, ErrorKind};
 pub enum Action {
     Abort,
     Accept,
@@ -17,28 +17,43 @@ impl Action {
             .expect("Faild reading the line.");
         //removed "no" and replaced it with "y" | "yes" (cause the _ already takes the "no" case)
         match input.trim().to_ascii_lowercase().as_str() {
-            //matching in lowercase as str
+            //matching as lowercased str
             "y" | "yes" => {
                 return Action::Accept;
             }
 
-            _ => Action::Abort, //if said anything else that yes/y then return abort and then in replace function quit
+            _ => Action::Abort, //if said anything else than yes/y then return abort and then in replace function quit
         }
     }
 }
 pub fn replace(path: &str) -> io::Result<()> {
     let action = Action::new(&path);
+
     match action {
         Action::Accept => {
             fs::remove_dir_all(path)?;
-            File::create(path)?;
-            let message = format!("Replaced directory with file: {path}");
-            logmgr::log_manager(&message);
-            Ok(())
+            match File::create(path) {
+                Ok(_) => {
+                    logmgr::log_manager(&format!("Replaced directory with file: {path}"));
+                    Ok(())
+                }
+                Err(e) => {
+                    match e.kind() {
+                        ErrorKind::IsADirectory => {
+                            eprintln!(
+                                "Error:{e}\nconsider removing the '/' char at the end of the path."
+                            );
+                        }
+                        _ => eprintln!("{e}"),
+                    }
+                    Err(e)
+                }
+            }
         }
+
         Action::Abort => {
             println!("Abort");
-            logmgr::log_manager("Aborted a replacement of a directory in a file. ");
+            logmgr::log_manager("Aborted a replacement of a directory in a file.");
             std::process::exit(0) //quit with success code (0)
         }
     }
