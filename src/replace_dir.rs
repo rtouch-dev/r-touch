@@ -34,7 +34,7 @@ pub fn replace(path: &str) -> io::Result<()> {
             fs::remove_dir_all(path)?;
             match File::create(path) {
                 Ok(_) => {
-                    logmgr::log_manager(&format!("Replaced directory with file: {path}"));
+                    logmgr::success_log(&format!("Replaced directory with file: {path}"));
                     Ok(())
                 }
                 Err(e) => {
@@ -53,7 +53,7 @@ pub fn replace(path: &str) -> io::Result<()> {
 
         Action::Abort => {
             println!("Abort");
-            logmgr::log_manager("Aborted a replacement of a directory in a file.");
+            logmgr::success_log("Aborted a replacement of a directory in a file.");
             std::process::exit(0) //quit with success code (0)
         }
     }
